@@ -1,17 +1,25 @@
 <template>
   <div id="projects">
     <h2>Projects</h2>
-    <div class="projects2">
+    <div class="projects-container">
       <div 
+        class="project-container"
         v-for="project, index in projects" 
-        class="proj " 
-        :style="{backgroundImage: 'url('+project.image_link+')'}"
         @click="expandPreview($event, index)">
-        <span class="name">{{ project.name }}</span>
-        <span class="links">
-          <a :href="project.github_repo">GitHub Repo</a>
-          <a :href="project.demo_url">Demo</a>
-        </span>
+        <div class="project"
+        :style="{backgroundImage: 'url('+project.image_link+')'}">
+          <span class="name">{{ project.name }}</span>
+          <span class="links">
+            <a :href="project.github_repo">GitHub Repo</a>
+            <a :href="project.demo_url">Demo</a>
+          </span>
+          <div class="hidden">
+            <iframe></iframe>
+            <span class="cross-container" @click="closePreview">
+              <span class="cross-x"></span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +45,7 @@ export default {
         {
           name: "Roommate Bill Tracker",
           github_repo: "https://github.com/arpiper/ngbills",
-          demo_url: "https://arpiper.github.io/ngbills",
+          demo_url: "https://arpiper.github.io/projects/ngbills",
           image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_billtracker.jpg",
           description: "Bill tracker built using Angular",
         },
@@ -78,19 +86,24 @@ export default {
       this.current_project = index
     },
     expandPreview: function (evt, index) {
-      evt.stopPropagation;
-      evt.preventDefault();
-      evt.target.className += " previewed"
-      let e = document.createElement("iframe")
-      e.src = this.projects[index].demo_url
-      evt.target.appendChild(e)
-      let c = document.createElement("span")
-      c.className = "cross-x"
-      c.onclick = this.closePreview(evt.target)
-      evt.target.appendChild(c)
+      evt.stopPropagation
+      evt.preventDefault()
+      //console.log("expand", evt.target)
+      if (evt.target.className === "project") {
+        let el = evt.target.querySelector(".hidden")
+        if (!el.firstChild.src) {
+          el.firstChild.src = this.projects[index].demo_url
+        }
+        el.className = "previewed"
+      }
     },
-    closePreview: function (el) {
-      console.log("close", el)
+    closePreview: function (evt) {
+      evt.stopPropagation
+      evt.preventDefault()
+      //console.log("closepreview", evt.target)
+      if (evt.target.className === "cross-x") {
+        document.querySelector(".previewed").className = "hidden"
+      }
     },
   },
 }
@@ -102,13 +115,19 @@ export default {
 /*
  * grid layout.
  */
-.projects2 {
+.projects-container {
   display: grid;
   width: 100%;
+  position: relative;
   grid-template-rows: repeat(3, 250px);
   grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
 }
-.proj {
+.project-container { 
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.project {
   display: flex;
   width: 100%;
   height: 100%;
@@ -116,17 +135,27 @@ export default {
   justify-content: flex-start;
   background-size: cover;
   align-items: flex-start;
+  cursor: pointer;
+  transition: transform .33s;
 }
-.proj span.name,
-.proj span.links {
+.project:hover {
+  position: absolute;
+  transform: scale(1.1);
+  box-shadow: 2px 2px 5px 0 black;
+  z-index: 101;
+  transition: transform .33s;
+}
+.project span.name,
+.project span.links {
   background-color: rgba(76, 175, 80, 0.5);
   background-color: var(--color-p-dark);
   opacity: 0.8;
   padding: 10px;
   margin: 10px;
 }
-.proj span.links a {
+.project span.links a {
   color: var(--color-s-dark);
+  font-size: 12px;
   display: block;
 }
 .tint {
@@ -154,13 +183,15 @@ export default {
 }
 .previewed iframe {
   position: absolute;
-  z-index: 101;
+  background-color: #ffffff;
   width: 100%;
   height: 100%;
 }
-.cross-x {
-  position: absolute;
+.cross-container {
   top: 10px;
   right: 20px;
+}
+.hidden {
+  display:none;
 }
 </style>
