@@ -11,30 +11,119 @@
     <title>Portfolio</title>
 
     <style>
+      :root {
+        --color-primary: #4caf50;
+        --color-p-light: #80e27e;
+        --color-p-dark: #087f23;
+        --color-second: #263238;
+        --color-s-light: #4f5b62;
+        --color-s-dark: #000a12;
+        --color-font-dark: #000000;
+        --color-font-light: #ffffff;
+      }
       * {
         box-sizing: border-box;
       }
       html, body {
         margin: 0;
         padding: 0;
-        height: 100%;
         width: 100%;
       }
-      .main {
+      .container {
+        background-color: var(--color-s-light);
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        color: #212121;
+        color: var(--color-font-light);
+        height: 100%;
+        display: grid;
+        grid-template-columns: 10% 80% 10%;
+        grid-template-rows: 75px 1fr 50px;
+        grid-template-areas:
+          "header header header"
+          "left main right"
+          "footer footer footer"
+      }
+      h1, h2 {
+        font-weight: normal;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        display: inline-block;
+        margin: 0 10px;
+      }
+      a {
+        color: var(--color-p-dark);
+      }
+      header {
+        grid-area: header;
+        background-color: var(--color-primary);
+        align-items: center;
+        padding-left: 10%;
+      }
+      main {
+        grid-area: main;
+      }
+      footer {
+        grid-area: footer;
+        padding-left: 10%;
+      }
+      .cross-x {
+        background: #aaa;
+        height: 1.5em;
+        width: 0.25em;
+        position: relative;
+        display: inline-block;
+        transform: rotate(45deg);
+      }
+      .cross-x:after {
+        position: absolute;
+        background: #aaa;
+        content: "";
+        height: 0.25em;
+        left: -0.625em;
+        top: 0.625em;
+        width: 1.5em;
+      }
+      .loading-projects {
+        width: 100%;
+        height: calc(100vh - 75px - 50px);
+      }
+      .loader,
+      .loader:after {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+      }
+      .loader {
+        margin: auto;
+        position: relative;
+        border: 5px solid rgba(255, 255, 255, 0.2);
+        border-top: 5px solid rgba(255, 255, 255, 0.75);
+        animation: spin 1.5s infinite linear;
+        top: 50%;
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
       }
     </style>
   </head>
   <body>
-    <main class="main">
-      <div>
+    <div class="container">
+      <header>
         <h1>Andrew Piper</h1>
-      </div>
-      <div id="projects"></div>
-    </main>
+      </header>
+      <main>
+        <div id="projects" class="loading-projects">
+          <div class="loader"></div>
+        </div>
+      </main>
+      <footer>&copy; Andrew Piper - <a href="https://github.com/arpiper" target="_blank" noopener>GitHub/arpiper</a></footer>
+    </div>
     <script src="/dist/build.js"></script>
   </body>
 </html>

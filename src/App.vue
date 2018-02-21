@@ -1,38 +1,17 @@
 <template>
   <div id="projects">
+    <h2>Projects</h2>
     <div class="projects2">
-      <div v-for="project in projects" class="proj" :style="{backgroundImage: 'url('+project.image_link+')'}">
+      <div 
+        v-for="project, index in projects" 
+        class="proj " 
+        :style="{backgroundImage: 'url('+project.image_link+')'}"
+        @click="expandPreview($event, index)">
         <span class="name">{{ project.name }}</span>
         <span class="links">
           <a :href="project.github_repo">GitHub Repo</a>
           <a :href="project.demo_url">Demo</a>
         </span>
-      </div>
-    </div>
-
-    <h2>Projects</h2>
-    <div class="projects">
-      <div class="project-tabs">
-        <span v-for="project, index in projects" @click="pick_project(index)" :class="{ front: index==current_project}">
-          {{ project.name }}
-        </span>
-      </div>
-      <div v-for="project, index in projects" class="project" :class="{ front: index==current_project }">
-        <div class="info">
-          <h3>{{ project.name }}</h3>
-          <span class="github-repo">
-            <a :href="project.github_repo">Github</a>
-          </span>
-          <span class="demo-url">
-            <a :href="project.demo_url">Demo</a>
-          </span>
-        </div>
-        <div class="description">
-          <p>{{ project.description }}</p>
-        </div>
-        <div class="live-demo">
-          <iframe :src="project.demo_url"></iframe>
-        </div>
       </div>
     </div>
   </div>
@@ -52,23 +31,66 @@ export default {
           name: "Movie Watch List",
           github_repo: "https://github.com/arpiper/movie-list",
           demo_url: "https://arpiper.github.io/movie-list",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/2018/01/09/600x600/movie-list.jpg",
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_movielist2.jpg",
           description: "Movie list",
         },
         {
           name: "Roommate Bill Tracker",
           github_repo: "https://github.com/arpiper/ngbills",
           demo_url: "https://arpiper.github.io/ngbills",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/2018/01/10/600x600/3279c000-d12a-48db-946b-f5331d91660b.jpg",
-          description: "Bill tracker built using Angular"
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_billtracker.jpg",
+          description: "Bill tracker built using Angular",
+        },
+        {
+          name: "Django Blog App",
+          github_repo: "https://github.com/arpiper/django-pipes-blog",
+          demo_url: "",
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_blog.jpg",
+          description: "blog",
+        },
+        {
+          name: "vue.js tetris",
+          github_repo: "https://github.com/arpiper/tetris",
+          demo_url: "https://arpiper.github.io/tetris",
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_tetris.jpg",
+          description: "tetris",
+        },
+        {
+          name: "chaos game",
+          github_repo: "https://github.com/arpiper/chaosgame",
+          demo_url: "https://arpiper.github.io/chaosgame",
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_chaos.jpg",
+          description: "numberphile inspired chaos game.",
+        },
+        {
+          name: "NASA NEO",
+          github_repo: "https://github.com/arpiper/nasa_neo",
+          demo_url: "https://arpiper.github.io/projects/nasa_neo",
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_nasaneo.jpg",
+          description: "NASA near earth objects orbits animated using d3.js and vue.js",
         },
       ],
       current_project: 1,
     }
   },
   methods: {
-    pick_project: function (index) {
+    pickProject: function (index) {
       this.current_project = index
+    },
+    expandPreview: function (evt, index) {
+      evt.stopPropagation;
+      evt.preventDefault();
+      evt.target.className += " previewed"
+      let e = document.createElement("iframe")
+      e.src = this.projects[index].demo_url
+      evt.target.appendChild(e)
+      let c = document.createElement("span")
+      c.className = "cross-x"
+      c.onclick = this.closePreview(evt.target)
+      evt.target.appendChild(c)
+    },
+    closePreview: function (el) {
+      console.log("close", el)
     },
   },
 }
@@ -76,100 +98,13 @@ export default {
 
 <style>
 #projects {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #212121;
 }
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #4caf50;
-}
-.projects {
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
-  height: 700px;
-  width: 100%;
-  overflow: hidden;
-}
-.project-tabs {
-  display: flex;
-  height: 30px;
-  justify-content: flex-start;
-  align-items: center;
-}
-.project-tabs span {
-  height: 100%;
-  padding: 0 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border-bottom: 2px solid #dbdbdb;
-  position: relative;
-}
-.projects span:before {
-  height: 0;
-  content: "";
-  width: 85%;
-  border-radius: 3px;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 30px solid #757575;
-  position: absolute;
-  z-index: -10;
-  top: 0;
-  left: 0;
-}
-.project-tabs span.front {
-  border-bottom: none;
-  z-index: 5;
-}
-.project {
-  display: flex;
-  width: 100%;
-  height: calc(100% - 30px);
-  color: #e0e0e0;
-  flex-direction: column;
-  background-color: #757575;
-  padding: 15px;
-  position: absolute;
-  top: 30px;
-  left: 0;
-}
-.project div {
-}
-.project .info h3 {
-  margin-bottom: 0;
-}
-.project .live-demo {
-  flex: 1;
-}
-.project.front {
-  z-index: 100;
-}
-.live-demo iframe {
-  width: 80%;
-  height: 100%;
-}
-
 /*
- * differnet layout.
+ * grid layout.
  */
 .projects2 {
   display: grid;
-  width: 85%;
+  width: 100%;
   grid-template-rows: repeat(3, 250px);
   grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
 }
@@ -177,8 +112,55 @@ a {
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 20px;
   flex-direction: column;
   justify-content: flex-start;
+  background-size: cover;
+  align-items: flex-start;
+}
+.proj span.name,
+.proj span.links {
+  background-color: rgba(76, 175, 80, 0.5);
+  background-color: var(--color-p-dark);
+  opacity: 0.8;
+  padding: 10px;
+  margin: 10px;
+}
+.proj span.links a {
+  color: var(--color-s-dark);
+  display: block;
+}
+.tint {
+  position: relative;
+}
+.tint:before {
+  position: absolute;
+  content: '';
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.1);
+}
+.tint div, 
+.tint span {
+  z-index: 1;
+}
+.previewed {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  z-index: 100;
+}
+.previewed iframe {
+  position: absolute;
+  z-index: 101;
+  width: 100%;
+  height: 100%;
+}
+.cross-x {
+  position: absolute;
+  top: 10px;
+  right: 20px;
 }
 </style>
