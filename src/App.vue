@@ -1,5 +1,12 @@
 <template>
-  <div id="projects">
+  <div id="portfolio">
+    <h2>Technologies</h2>
+    <div class="technologies">
+      <span v-for="tech in technologies" class="tech">
+        <span>{{ tech.name }}</span>
+      </span>
+    </div>
+
     <h2>Projects</h2>
     <div class="projects-container">
       <div 
@@ -23,7 +30,7 @@
 
 <script>
 export default {
-  name: "projects",
+  name: "portfolio",
   data () {
     return {
       project_names: [
@@ -75,6 +82,16 @@ export default {
         },
       ],
       current_project: 1,
+      technologies: [
+        {name: "Python", logo: ""},
+        {name: "Django", logo: ""},
+        {name: "PHP", logo: ""},
+        {name: "JavaScript", logo: ""},
+        {name: "Angular", logo: ""},
+        {name: "Vue.js", logo: ""},
+        {name: "HTML", logo: ""},
+        {name: "CSS", logo: ""},
+      ]
     }
   },
   methods: {
@@ -201,5 +218,16 @@ export default {
 }
 .hidden {
   display:none;
+}
+.technologies {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tech {
+  padding: 10px;
+  margin: 5px;
+  background-color: var(--color-primary);
+  color: var(--color-font-dark);
 }
 </style>
