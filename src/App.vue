@@ -4,8 +4,7 @@
     <div class="projects-container">
       <div 
         class="project-container"
-        v-for="project, index in projects" 
-        @click="expandPreview($event, index)">
+        v-for="project, index in projects">
         <div class="project"
         :style="{backgroundImage: 'url('+project.image_link+')'}">
           <span class="name">{{ project.name }}</span>
@@ -13,12 +12,9 @@
             <a :href="project.github_repo">GitHub Repo</a>
             <a :href="project.demo_url">Demo</a>
           </span>
-          <div class="hidden">
-            <iframe></iframe>
-            <span class="cross-container" @click="closePreview">
-              <span class="cross-x"></span>
-            </span>
-          </div>
+          <span class="text">
+            {{ project.description }}
+          </span>
         </div>
       </div>
     </div>
@@ -135,7 +131,6 @@ export default {
   justify-content: flex-start;
   background-size: cover;
   align-items: flex-start;
-  cursor: pointer;
   transition: transform .33s;
 }
 .project:hover {
@@ -143,11 +138,10 @@ export default {
   transform: scale(1.1);
   box-shadow: 2px 2px 5px 0 black;
   z-index: 101;
-  transition: transform .33s;
+  transition: transform .33s, opacity .33s;
 }
 .project span.name,
-.project span.links {
-  background-color: rgba(76, 175, 80, 0.5);
+.project span.links a {
   background-color: var(--color-p-dark);
   opacity: 0.8;
   padding: 10px;
@@ -156,7 +150,21 @@ export default {
 .project span.links a {
   color: var(--color-s-dark);
   font-size: 12px;
-  display: block;
+  padding: 5px;
+  display: inline-block;
+}
+.project span.text {
+  opacity: 0;
+  margin-top: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  align-self: center;
+  transition: opacity .33s;
+}
+.project:hover span.text {
+  opacity: 0.85;
+  background-color: var(--color-s-light);
+  transition: opacity .33s;
 }
 .tint {
   position: relative;
