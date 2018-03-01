@@ -17,7 +17,7 @@
           <span class="name">{{ project.name }}</span>
           <span class="links">
             <a :href="project.github_repo">GitHub Repo</a>
-            <a :href="project.demo_url">Demo</a>
+            <a v-if="project.demo_url.length > 0" :href="project.demo_url">Demo</a>
           </span>
           <span class="text">
             {{ project.description }}
@@ -49,7 +49,7 @@ export default {
           name: "Roommate Bill Tracker",
           github_repo: "https://github.com/arpiper/ngbills",
           demo_url: "https://arpiper.github.io/projects/ngbills",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_billtracker.jpg",
+          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_billtracker2.jpg",
           description: "Bill tracker built using Angular",
         },
         {
@@ -89,6 +89,7 @@ export default {
         {name: "JavaScript", logo: ""},
         {name: "Angular", logo: ""},
         {name: "Vue.js", logo: ""},
+        {name: "Svelte", logo: ""},
         {name: "HTML", logo: ""},
         {name: "CSS", logo: ""},
       ]
