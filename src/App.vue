@@ -1,27 +1,31 @@
 <template>
   <div id="portfolio">
-    <h2>Technologies</h2>
-    <div class="technologies">
-      <span v-for="tech in technologies" class="tech">
-        <span>{{ tech.name }}</span>
-      </span>
+    <div class="portfolio-block">
+      <h2>Technologies</h2>
+      <div class="technologies">
+        <span v-for="tech in technologies" class="tech">
+          <span>{{ tech.name }}</span>
+        </span>
+      </div>
     </div>
 
-    <h2>Projects</h2>
-    <div class="projects-container">
-      <div 
-        class="project-container"
-        v-for="project, index in projects">
-        <div class="project"
-        :style="{backgroundImage: 'url('+project.image_link+')'}">
-          <span class="name">{{ project.name }}</span>
-          <span class="links">
-            <a :href="project.github_repo">GitHub Repo</a>
-            <a v-if="project.demo_url.length > 0" :href="project.demo_url">Demo</a>
-          </span>
-          <span class="text">
-            {{ project.description }}
-          </span>
+    <div class='portfolio-block'>
+      <h2>Projects</h2>
+      <div class="projects-container">
+        <div 
+          class="project-container"
+          v-for="project, index in projects">
+          <div class="project"
+          :style="{backgroundImage: 'url('+project.image_link+')'}">
+            <span class="name">{{ project.name }}</span>
+            <span class="links">
+              <a :href="project.github_repo">GitHub Repo</a>
+              <a v-if="project.demo_url.length > 0" :href="project.demo_url">Demo</a>
+            </span>
+            <span class="text">
+              {{ project.description }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -43,7 +47,7 @@ export default {
           github_repo: "https://github.com/arpiper/movie-list",
           demo_url: "https://arpiper.github.io/movie-list",
           image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_movielist2.jpg",
-          description: "Movie list",
+          description: "Movie wacth list built with Vue.js",
         },
         {
           name: "Roommate Bill Tracker",
@@ -57,28 +61,28 @@ export default {
           github_repo: "https://github.com/arpiper/django-pipes-blog",
           demo_url: "",
           image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_blog.jpg",
-          description: "blog",
+          description: "blog app built for Django.",
         },
         {
           name: "vue.js tetris",
           github_repo: "https://github.com/arpiper/tetris",
           demo_url: "https://arpiper.github.io/tetris",
           image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_tetris.jpg",
-          description: "tetris",
+          description: "Tetris built with Vue.js",
         },
         {
           name: "chaos game",
           github_repo: "https://github.com/arpiper/chaosgame",
           demo_url: "https://arpiper.github.io/chaosgame",
           image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_chaos.jpg",
-          description: "numberphile inspired chaos game.",
+          description: "numberphile inspired 'chaos game' showing fun geometric properties.",
         },
         {
           name: "NASA NEO",
           github_repo: "https://github.com/arpiper/nasa_neo",
           demo_url: "https://arpiper.github.io/projects/nasa_neo",
           image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_nasaneo.jpg",
-          description: "NASA near earth objects orbits animated using d3.js and vue.js",
+          description: "NASA near earth objects orbits animated using D3.js and Vue.js",
         },
       ],
       current_project: 1,
@@ -89,6 +93,7 @@ export default {
         {name: "JavaScript", logo: ""},
         {name: "Angular", logo: ""},
         {name: "Vue.js", logo: ""},
+        {name: "D3.js", logo: ""},
         {name: "Svelte", logo: ""},
         {name: "HTML", logo: ""},
         {name: "CSS", logo: ""},
@@ -102,7 +107,6 @@ export default {
     expandPreview: function (evt, index) {
       evt.stopPropagation
       evt.preventDefault()
-      //console.log("expand", evt.target)
       if (evt.target.className === "project") {
         let el = evt.target.querySelector(".hidden")
         if (!el.firstChild.src) {
@@ -227,7 +231,7 @@ export default {
 }
 .tech {
   padding: 10px;
-  margin: 5px;
+  margin: 10px;
   background-color: var(--color-primary);
   color: var(--color-font-dark);
 }
