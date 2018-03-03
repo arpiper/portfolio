@@ -41,7 +41,7 @@ export default {
         "Movie Watch List",
         "Bill Tracker",
       ],
-      projects: [
+      projects2: [
         {
           name: "Movie Watch List",
           github_repo: "https://github.com/arpiper/movie-list",
@@ -97,10 +97,21 @@ export default {
         {name: "Svelte", logo: ""},
         {name: "HTML", logo: ""},
         {name: "CSS", logo: ""},
-      ]
+      ],
+      projects: [],
     }
   },
   methods: {
+    getData: function (url, data_key) {
+      fetch(url)
+        .then( (response) => {
+          return response.json()
+        })
+        .then(res => {
+          //this.projects = res.projects
+          this.$set(this._data, data_key, res)
+        })
+    },
     pickProject: function (index) {
       this.current_project = index
     },
@@ -118,12 +129,15 @@ export default {
     closePreview: function (evt) {
       evt.stopPropagation
       evt.preventDefault()
-      //console.log("closepreview", evt.target)
       if (evt.target.className === "cross-x") {
         document.querySelector(".previewed").className = "hidden"
       }
     },
   },
+  mounted () {
+    this.getData("https://arpiper.com/api/projects", "projects")
+    this.getData("https://arpiper.com/api/tech", "tech")
+  }
 }
 </script>
 
@@ -137,7 +151,7 @@ export default {
   display: grid;
   width: 100%;
   position: relative;
-  grid-template-rows: repeat(3, 250px);
+  grid-template-rows: repeat(auto-fill, 250px);
   grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
 }
 .project-container { 
@@ -226,6 +240,7 @@ export default {
 }
 .technologies {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
@@ -234,5 +249,10 @@ export default {
   margin: 10px;
   background-color: var(--color-primary);
   color: var(--color-font-dark);
+}
+@media screen and (max-width: 800px) {
+  .projects-container {
+    grid-template-columns: 100%;
+  }
 }
 </style>
