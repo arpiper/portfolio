@@ -1,10 +1,16 @@
 <template>
   <div id="portfolio">
+    <div class="portfolio-block" v-if="about">
+      <h2>About Me</h2>
+      <p>
+        {{ about.about_text }}
+      </p>
+    </div>
     <div class="portfolio-block">
       <h2>Technologies</h2>
       <div class="technologies">
         <span v-for="tech in technologies" class="tech">
-          <span>{{ tech.name }}</span>
+          <span>{{ tech }}</span>
         </span>
       </div>
     </div>
@@ -41,64 +47,10 @@ export default {
         "Movie Watch List",
         "Bill Tracker",
       ],
-      projects2: [
-        {
-          name: "Movie Watch List",
-          github_repo: "https://github.com/arpiper/movie-list",
-          demo_url: "https://arpiper.github.io/movie-list",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_movielist2.jpg",
-          description: "Movie wacth list built with Vue.js",
-        },
-        {
-          name: "Roommate Bill Tracker",
-          github_repo: "https://github.com/arpiper/ngbills",
-          demo_url: "https://arpiper.github.io/projects/ngbills",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_billtracker2.jpg",
-          description: "Bill tracker built using Angular",
-        },
-        {
-          name: "Django Blog App",
-          github_repo: "https://github.com/arpiper/django-pipes-blog",
-          demo_url: "",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_blog.jpg",
-          description: "blog app built for Django.",
-        },
-        {
-          name: "vue.js tetris",
-          github_repo: "https://github.com/arpiper/tetris",
-          demo_url: "https://arpiper.github.io/tetris",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_tetris.jpg",
-          description: "Tetris built with Vue.js",
-        },
-        {
-          name: "chaos game",
-          github_repo: "https://github.com/arpiper/chaosgame",
-          demo_url: "https://arpiper.github.io/chaosgame",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_chaos.jpg",
-          description: "numberphile inspired 'chaos game' showing fun geometric properties.",
-        },
-        {
-          name: "NASA NEO",
-          github_repo: "https://github.com/arpiper/nasa_neo",
-          demo_url: "https://arpiper.github.io/projects/nasa_neo",
-          image_link: "https://storage.googleapis.com/pipes-stor/media/featured_images/port_nasaneo.jpg",
-          description: "NASA near earth objects orbits animated using D3.js and Vue.js",
-        },
-      ],
       current_project: 1,
-      technologies: [
-        {name: "Python", logo: ""},
-        {name: "Django", logo: ""},
-        {name: "PHP", logo: ""},
-        {name: "JavaScript", logo: ""},
-        {name: "Angular", logo: ""},
-        {name: "Vue.js", logo: ""},
-        {name: "D3.js", logo: ""},
-        {name: "Svelte", logo: ""},
-        {name: "HTML", logo: ""},
-        {name: "CSS", logo: ""},
-      ],
+      technologies: [],
       projects: [],
+      about: undefined,
     }
   },
   methods: {
@@ -109,6 +61,8 @@ export default {
         })
         .then(res => {
           this.projects = res.projects
+          this.about = res.about
+          this.technologies = res.tech
         })
     },
     pickProject: function (index) {
@@ -134,7 +88,7 @@ export default {
     },
   },
   created () {
-    this.getData("https://arpiper.com/api/projects")
+    this.getData("https://arpiper.com/api/portfolio")
   }
 }
 </script>
@@ -156,6 +110,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 250px;
 }
 .project {
   display: flex;
