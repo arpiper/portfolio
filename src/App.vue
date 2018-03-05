@@ -102,14 +102,13 @@ export default {
     }
   },
   methods: {
-    getData: function (url, data_key) {
+    getData: function (url) {
       fetch(url)
         .then( (response) => {
           return response.json()
         })
         .then(res => {
-          //this.projects = res.projects
-          this.$set(this._data, data_key, res)
+          this.projects = res.projects
         })
     },
     pickProject: function (index) {
@@ -134,9 +133,8 @@ export default {
       }
     },
   },
-  mounted () {
-    this.getData("https://arpiper.com/api/projects", "projects")
-    this.getData("https://arpiper.com/api/tech", "tech")
+  created () {
+    this.getData("https://arpiper.com/api/projects")
   }
 }
 </script>
