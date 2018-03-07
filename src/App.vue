@@ -2,8 +2,8 @@
   <div id="portfolio">
     <div class="portfolio-block" v-if="about">
       <h2>About Me</h2>
-      <p>
-        {{ about.about_text }}
+      <p v-for="text in about.about_text">
+        {{ text }}
       </p>
     </div>
     <div class="portfolio-block">

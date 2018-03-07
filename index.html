@@ -58,7 +58,7 @@
         margin: 0 10px;
       }
       a {
-        color: var(--color-p-dark);
+        color: var(--color-p-light);
       }
       header {
         grid-area: header;
@@ -74,6 +74,10 @@
         padding-left: 10%;
         display: flex;
         align-items: center;
+      }
+      header a {
+        color: inherit;
+        text-decoration: none;
       }
       .portfolio-block {
         margin: 20px;
@@ -140,7 +144,7 @@
   <body>
     <div class="container">
       <header>
-        <h1>Andrew Piper</h1>
+        <h1><a href="https://arpiper.com">Andrew Piper</a></h1>
       </header>
       <main>
         <div id="portfolio" class="loading-projects">
