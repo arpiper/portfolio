@@ -20,7 +20,8 @@
       <div class="projects-container">
         <div 
           class="project-container"
-          v-for="project, index in projects">
+          v-for="project, index in projects"
+          :style="project.order">
           <div class="project"
           :style="{backgroundImage: 'url('+project.image_link+')'}">
             <span class="name">{{ project.name }}</span>
