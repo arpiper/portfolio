@@ -27,7 +27,7 @@
             <span class="name">{{ project.name }}</span>
             <span class="links">
               <a :href="project.github_repo">GitHub Repo</a>
-              <a v-if="project.demo_url.length > 0" :href="project.demo_url">Demo</a>
+              <a v-if="project.demo_url.length > 0" :href="project.demo_url" target="_blank">Demo</a>
             </span>
             <span class="text">
               {{ project.description }}
