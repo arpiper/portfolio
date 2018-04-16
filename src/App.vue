@@ -1,27 +1,37 @@
 <template>
   <div id="portfolio">
-    <div class="portfolio-block" v-if="about">
-      <h2>About Me</h2>
-      <p v-for="text in about.about_text">
-        {{ text }}
-      </p>
-    </div>
-    <div class="portfolio-block">
-      <h2>Technologies</h2>
-      <div class="technologies">
-        <span v-for="tech in technologies" class="tech">
-          <span>{{ tech }}</span>
-        </span>
+    <transition appear>
+      <div class="portfolio-block" v-if="about" key='about' data-key='1'>
+        <h2>About Me</h2>
+        <p v-for="text in about.about_text">
+          {{ text }}
+        </p>
       </div>
-    </div>
-
-    <div class='portfolio-block'>
-      <h2>Projects</h2>
-      <div class="projects-container">
+    </transition>
+    <transition appear>
+      <div class="portfolio-block" key='tech' data-key='2' v-if="technologies">
+        <h2>Technologies</h2>
+        <div class="technologies">
+          <span v-for="tech in technologies" class="tech">
+            <span>{{ tech }}</span>
+          </span>
+        </div>
+      </div>
+    </transition>
+    <div class='portfolio-block' key='projects' data-key='3' >
+      <transition appear>
+        <h2>Projects</h2>
+      </transition>
+      <transition-group name="projects" 
+        tag="div" 
+        @before-enter="beforeEnter"
+        @enter="enter"
+        class="projects-container">
         <div 
           class="project-container"
           v-for="project, index in projects"
-          :style="project.order">
+          :key="index"
+          :data-key="index">
           <div class="project"
           :style="{backgroundImage: 'url('+project.image_link+')'}">
             <span class="name">{{ project.name }}</span>
@@ -34,7 +44,7 @@
             </span>
           </div>
         </div>
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -49,8 +59,8 @@ export default {
         "Bill Tracker",
       ],
       current_project: 1,
-      technologies: [],
-      projects: [],
+      technologies: undefined,
+      projects: undefined,
       about: undefined,
     }
   },
@@ -62,13 +72,35 @@ export default {
         })
         .then(res => {
           this.projects = res.projects
+          this.projects.sort((a,b) => {
+            if (parseInt(a.order.split(":")[1]) > parseInt(b.order.split(":")[1])) {
+              return 1
+            }
+            if (parseInt(a.order.split(":")[1]) < parseInt(b.order.split(":")[1])) {
+              return -1 
+            }         
+            return 0
+          })
           this.about = res.about
           this.technologies = res.tech
         })
     },
+    /* transition functions */
+    beforeEnter: function (el) {
+      el.style.opacity = 0
+    },
+    enter: function (el, done) {
+      let delay = el.dataset.key * 200
+      console.log(delay, el)
+      setTimeout(() => {
+        el.style.opacity = 1
+      }, delay)
+    },
+    /* unused */
     pickProject: function (index) {
       this.current_project = index
     },
+    /* unused */
     expandPreview: function (evt, index) {
       evt.stopPropagation
       evt.preventDefault()
@@ -80,6 +112,7 @@ export default {
         el.className = "previewed"
       }
     },
+    /* unused */
     closePreview: function (evt) {
       evt.stopPropagation
       evt.preventDefault()
@@ -90,12 +123,13 @@ export default {
   },
   created () {
     this.getData("https://arpiper.com/api/portfolio")
-  }
+  },
 }
 </script>
 
 <style>
 #projects {
+  transition: opacity 1s;
 }
 /*
  * grid layout.
@@ -112,6 +146,7 @@ export default {
   width: 100%;
   height: 100%;
   min-height: 250px;
+  transition: opacity 1s;
 }
 .project {
   display: flex;
@@ -203,6 +238,14 @@ export default {
   margin: 10px;
   background-color: var(--color-primary);
   color: var(--color-font-dark);
+}
+.v-enter-active,
+.appear-enter-before {
+  transition: opacity .5s;
+}
+.v-enter,
+.appear-enter {
+  opacity: 0;
 }
 @media screen and (max-width: 800px) {
   .projects-container {
