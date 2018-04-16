@@ -20,7 +20,7 @@
     </transition>
     <div class='portfolio-block' key='projects' data-key='3' >
       <transition appear>
-        <h2>Projects</h2>
+        <h2 v-if="projects">Projects</h2>
       </transition>
       <transition-group name="projects" 
         tag="div" 
