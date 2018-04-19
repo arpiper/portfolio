@@ -1,14 +1,14 @@
 <template>
   <div id="portfolio">
-    <transition appear>
+    <transition-group name="blocks"
+      @before-enter="beforeEnter"
+      @enter="enter">
       <div class="portfolio-block" v-if="about" key='about' data-key='1'>
         <h2>About Me</h2>
         <p v-for="text in about.about_text">
           {{ text }}
         </p>
       </div>
-    </transition>
-    <transition appear>
       <div class="portfolio-block" key='tech' data-key='2' v-if="technologies">
         <h2>Technologies</h2>
         <div class="technologies">
@@ -17,35 +17,29 @@
           </span>
         </div>
       </div>
-    </transition>
-    <div class='portfolio-block' key='projects' data-key='3' >
-      <transition appear>
-        <h2 v-if="projects">Projects</h2>
-      </transition>
-      <transition-group name="projects" 
-        tag="div" 
-        @before-enter="beforeEnter"
-        @enter="enter"
-        class="projects-container">
-        <div 
-          class="project-container"
-          v-for="project, index in projects"
-          :key="index"
-          :data-key="index">
-          <div class="project"
-          :style="{backgroundImage: 'url('+project.image_link+')'}">
-            <span class="name">{{ project.name }}</span>
-            <span class="links">
-              <a :href="project.github_repo">GitHub Repo</a>
-              <a v-if="project.demo_url.length > 0" :href="project.demo_url" target="_blank">Demo</a>
-            </span>
-            <span class="text">
-              {{ project.description }}
-            </span>
+      <div class='portfolio-block' key='projects' data-key='3' v-if="projects">
+        <h2>Projects</h2>
+        <div class="projects-container">
+          <div 
+            class="project-container"
+            v-for="project, index in projects"
+            :key="index"
+            :data-key="index">
+            <div class="project"
+            :style="{backgroundImage: 'url('+project.image_link+')'}">
+              <span class="name">{{ project.name }}</span>
+              <span class="links">
+                <a :href="project.github_repo">GitHub Repo</a>
+                <a v-if="project.demo_url.length > 0" :href="project.demo_url" target="_blank">Demo</a>
+              </span>
+              <span class="text">
+                {{ project.description }}
+              </span>
+            </div>
           </div>
         </div>
-      </transition-group>
-    </div>
+      </div>
+    </transition-group>
   </div>
 </template>
 
@@ -88,12 +82,28 @@ export default {
     /* transition functions */
     beforeEnter: function (el) {
       el.style.opacity = 0
+      el.style.top = '-100px'
+      console.log('before-enter', el)
     },
     enter: function (el, done) {
       let delay = el.dataset.key * 200
-      console.log(delay, el)
+      console.log('enter', el)
       setTimeout(() => {
         el.style.opacity = 1
+        el.style.top = 0
+      }, delay)
+    },
+    beforeEnter2: function (el) {
+      el.style.opacity = 0
+      el.style.top = '-100px'
+      console.log('before-enter', el)
+    },
+    enter2: function (el, done) {
+      let delay = el.dataset.key * 200
+      console.log('enter', el)
+      setTimeout(() => {
+        el.style.opacity = 1
+        el.style.top = 0
       }, delay)
     },
     /* unused */
@@ -241,7 +251,7 @@ export default {
 }
 .v-enter-active,
 .appear-enter-before {
-  transition: opacity .5s;
+  transition: all .5s;
 }
 .v-enter,
 .appear-enter {
